@@ -33,7 +33,7 @@ void SimpleShapeApplication::init() {
         exit(-1);
     }
 
-    // A vector containing the x,y,z vertex coordinates for the triangle.
+    // A vector containing the x,y,z,r,g,b vertex coordinates for the triangle.
     std::vector<GLfloat> vertices = {
             -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f,
             0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f,
@@ -72,15 +72,17 @@ void SimpleShapeApplication::init() {
      * layout (location = 0) in vec4 a_vertex_position;
      * directive.
      */
+
     // This specifies that the data for attribute 0 should be read from a vertex buffer
     OGL_CALL(glEnableVertexAttribArray(0));
-    // and this specifies the data layout in the buffer.
+    // and this specifies the verices data layout in the buffer.
     OGL_CALL(glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), 
                                    reinterpret_cast<GLvoid *>(0)));
 
+    // This specifies that the data for attribute 0 should be read from a vertex buffer
     OGL_CALL(glEnableVertexAttribArray(1));
-    // and this specifies the data layout in the buffer.
-
+    
+    // and this specifies the colors data layout in the buffer.
     OGL_CALL(glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), 
                                    reinterpret_cast<GLvoid *>(3 * sizeof(GLfloat)) ));                               
 
