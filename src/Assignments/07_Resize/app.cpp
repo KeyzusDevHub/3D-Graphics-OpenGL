@@ -17,6 +17,8 @@
 
 #include "glm/gtc/constants.hpp"
 
+#include "glm/gtc/matrix_transform.hpp"
+
 #include "Application/utils.h"
 
 void SimpleShapeApplication::init() {
@@ -41,19 +43,31 @@ void SimpleShapeApplication::init() {
 
     // A vector containing the x,y,z vertex coordinates for the triangle.
     std::vector<GLfloat> vertices = {
-            -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f,
-            0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f,
-            0.0f, 0.5f, 0.0f, 1.0f, 0.0f, 0.0f,
-            -0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f,
-            0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f,
+            -0.5f, 0.5f, 0.0f, 0.5f, 0.5f, 0.5f,
+            0.5f, 0.5f, 0.0f, 0.5f, 0.5f, 0.5f,
+            0.5f, -0.5f, 0.0f, 0.5f, 0.5f, 0.5f,
+            -0.5f, -0.5f, 0.0f, 0.5f, 0.5f, 0.5f,
+            -0.5f, 0.5f, 0.0f, 0.0f, 1.0f, 0.0f,
             -0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f,
-            0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f,
+            0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f,
+            -0.5f, -0.5f, 0.0f, 1.0f, 1.0f, 0.0f,
+            0.5, -0.5f, 0.0f, 1.0f, 1.0f, 0.0f,
+            0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 0.0f,
+            0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f,
+            0.5f, 0.5f, 0.0f, 1.0f, 0.0f, 0.0f,
+            0.0f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f,
+            0.5f, 0.5f, 0.0f, 0.0f, 0.0f, 1.0f,
+            -0.5f, 0.5f, 0.0f, 0.0f, 0.0f, 1.0f,
+            0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f
             };
 
     std::vector<GLubyte> indices = {
         0, 1, 2,
-        3, 4, 5,
-        5, 4, 6
+        0, 2, 3,
+        4, 5, 6,
+        7, 8, 9,
+        10, 11, 12,
+        13, 14, 15
     };
 
     /*
@@ -89,39 +103,18 @@ void SimpleShapeApplication::init() {
     OGL_CALL(glBindVertexArray(vao_));
     OGL_CALL(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, i_buffer_handle));
 
-
-
-    GLuint u_buffer_handle;
-    OGL_CALL(glGenBuffers(1, &u_buffer_handle));
-    OGL_CALL(glBindBuffer(GL_UNIFORM_BUFFER, u_buffer_handle));
-    OGL_CALL(glBufferData(GL_UNIFORM_BUFFER, 8 * sizeof(float), NULL, GL_STATIC_DRAW));
+    OGL_CALL(glGenBuffers(1, &u_trans_buffer_handle_));
+    OGL_CALL(glBindBuffer(GL_UNIFORM_BUFFER, u_trans_buffer_handle_));
+    OGL_CALL(glBufferData(GL_UNIFORM_BUFFER, 16 * sizeof(float), NULL, GL_STATIC_DRAW));
     OGL_CALL(glBindBuffer(GL_UNIFORM_BUFFER, 0));
 
-    float strength = 0.5;
-    float mix_color[3] = {0.0, 0.0, 1.0};
-
-    OGL_CALL(glBindBufferBase(GL_UNIFORM_BUFFER, 0, u_buffer_handle));
-    OGL_CALL(glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(float), &strength));
-    OGL_CALL(glBufferSubData(GL_UNIFORM_BUFFER, 4 * sizeof(float), 3 * sizeof(float), mix_color));
-
-    GLuint u2_buffer_handle;
-    OGL_CALL(glGenBuffers(1, &u2_buffer_handle));
-    OGL_CALL(glBindBuffer(GL_UNIFORM_BUFFER, u2_buffer_handle));
-    OGL_CALL(glBufferData(GL_UNIFORM_BUFFER, 12 * sizeof(float), NULL, GL_STATIC_DRAW));
-    OGL_CALL(glBindBuffer(GL_UNIFORM_BUFFER, 0));
-
-    float theta = glm::pi<float>() / 6.0f;//30 degrees
-    float cs = std::cos(theta);
-    float ss = std::sin(theta);
-    glm::mat2 rot{cs,ss,-ss,cs};
-    glm::vec2 trans{0.0, -0.25};
-    glm::vec2 scale{0.5, 0.5};
-
-    OGL_CALL(glBindBufferBase(GL_UNIFORM_BUFFER, 1, u2_buffer_handle));
-    OGL_CALL(glBufferSubData(GL_UNIFORM_BUFFER, 0, 2 * sizeof(float), &scale));
-    OGL_CALL(glBufferSubData(GL_UNIFORM_BUFFER, 2 * sizeof(float), 2 * sizeof(float), &trans));
-    OGL_CALL(glBufferSubData(GL_UNIFORM_BUFFER, 4 * sizeof(float), 2 * sizeof(float), &rot[0]));
-    OGL_CALL(glBufferSubData(GL_UNIFORM_BUFFER, 8 * sizeof(float), 2 * sizeof(float), &rot[1]));
+    auto [w, h] = frame_buffer_size();
+    fov_ = glm::radians(45.0f);
+    aspect_ = (GLfloat) w / (GLfloat) h;
+    near_ = 0.1f;
+    far_ = 20.0f;
+    M_ = glm::mat4(1.0f);
+    V_ = glm::lookAt(glm::vec3(2, 1, 2), glm::vec3(0, 0, 0), glm::vec3(0, 0, 1));
 
 
     /*
@@ -151,16 +144,28 @@ void SimpleShapeApplication::init() {
     OGL_CALL(glClearColor(0.81f, 0.81f, 0.8f, 1.0f));
 
     // This set up an OpenGL viewport of the size of the whole rendering window.
-    auto [w, h] = frame_buffer_size();
     OGL_CALL(glViewport(0, 0, w, h));
 
     OGL_CALL(glUseProgram(program));
+    glEnable(GL_DEPTH_TEST);
 }
 
 //This functions is called every frame and does the actual rendering.
 void SimpleShapeApplication::frame() {
     // Binding the VAO will set up all the required vertex attribute arrays.
+    P_ = glm::perspective(fov_, aspect_, near_, far_);
+    glm::mat4 PVM = P_ * V_ * M_;
+
     OGL_CALL(glBindVertexArray(vao_));
-    OGL_CALL(glDrawElements(GL_TRIANGLES, 9, GL_UNSIGNED_BYTE, nullptr));
+    OGL_CALL(glBindBufferBase(GL_UNIFORM_BUFFER, 1, u_trans_buffer_handle_));
+    OGL_CALL(glDrawElements(GL_TRIANGLES, 18, GL_UNSIGNED_BYTE, nullptr));
+    OGL_CALL(glBufferSubData(GL_UNIFORM_BUFFER, 0, 16 * sizeof(float), &PVM[0]));
+    OGL_CALL(glBindBufferBase(GL_UNIFORM_BUFFER, 1, 0));
     OGL_CALL(glBindVertexArray(0));
+}
+
+void SimpleShapeApplication::framebuffer_resize_callback(int w, int h) {
+    glViewport(0, 0, w, h);
+    Application::framebuffer_resize_callback(w, h);
+    aspect_ = (GLfloat) w / (GLfloat) h;
 }
