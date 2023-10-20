@@ -43,9 +43,15 @@ void SimpleShapeApplication::init() {
     
     OGL_CALL(glGenTextures(1, &gl_textures));
 
-    OGL_CALL(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_FLOAT, img));
+    glBindTexture(GL_TEXTURE_2D, gl_textures); 
 
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    OGL_CALL(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR));
+
+    OGL_CALL(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, img));
+    
+    glBindTexture(GL_TEXTURE_2D, 0); 
+
+    stbi_image_free(img);
 
     /*
      * A utility function that reads the shaders' source files, compiles them and creates the program object,
@@ -57,23 +63,23 @@ void SimpleShapeApplication::init() {
 
     // A vector containing the x,y,z vertex coordinates for the triangle.
     std::vector<GLfloat> vertices = {
-            -0.5f, 0.5f, 0.0f, 0.0f, 0.0f,
-            0.5f, 0.5f, 0.0f, 0.5f, 0.1910f,
-            0.5f, -0.5f, 0.0f, 1.0f, 0.0f,
-            -0.5f, -0.5f, 0.0f, 0.1910f, 0.5f,
-            -0.5f, 0.5f, 0.0f, 0.8090f, 0.5f,
-            0.5, -0.5f, 0.0f, 0.5f, 0.8090f,
-            -0.5f, 0.5f, 0.0f, 0.0f, 1.0f,
+            -0.5f, 0.5f, 0.0f, 0.1910f, 0.5f,
+            0.5f, 0.5f, 0.0f, 0.5f, 0.8090f,
+            0.5f, -0.5f, 0.0f, 0.8090f, 0.5f,
+            -0.5f, -0.5f, 0.0f, 0.5f, 0.1910f,
+            0.0f, 0.0f, 1.0f, 0.0f, 0.0f,
+            0.0f, 0.0f, 1.0f, 1.0f, 0.0f,
+            0.0f, 0.0f, 1.0f, 0.0f, 1.0f,
             0.0f, 0.0f, 1.0f, 1.0f, 1.0f,
             };
 
     std::vector<GLubyte> indices = {
         0, 1, 2,
         0, 2, 3,
-        4, 3, 7,
-        3, 5, 7,
-        5, 1, 7,
-        1, 6, 7
+        0, 3, 4,
+        2, 3, 5,
+        0, 1, 6,
+        1, 2, 7
     };
 
     set_camera(new xe::Camera);
@@ -92,25 +98,7 @@ void SimpleShapeApplication::init() {
 
     pyramid->load_indices(0, indices.size() * sizeof(GLubyte), indices.data());
 
-    auto kd_gray_material = new xe::KdMaterial(glm::vec4(0.5f, 0.5f, 0.5f, 1.0f));
-    
-    pyramid->add_primitive(0, 6, kd_gray_material);
-    
-    auto kd_green_material = new xe::KdMaterial(glm::vec4(0.0f, 1.0f, 0.0f, 1.0f));
-
-    pyramid->add_primitive(6, 9, kd_green_material);
-
-    auto kd_yellow_material = new xe::KdMaterial(glm::vec4(1.0f, 1.0f, 0.0f, 1.0f));
-
-    pyramid->add_primitive(9, 12, kd_yellow_material);
-
-    auto kd_red_material = new xe::KdMaterial(glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
-
-    pyramid->add_primitive(12, 15, kd_red_material);
-
-    auto kd_blue_material = new xe::KdMaterial(glm::vec4(0.0f, 0.0f, 1.0f, 1.0f));
-
-    pyramid->add_primitive(15, 18, kd_blue_material);
+    pyramid->add_primitive(0, 18, new xe::KdMaterial({1.f, 1.f, 1.0f, 1.0f}, false, gl_textures));
 
     add_mesh(pyramid);
 

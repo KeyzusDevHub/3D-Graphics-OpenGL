@@ -20,7 +20,8 @@ void main() {
         vFragColor.rg = vertex_texture.rg;
     }
     else if (use_map_Kd){
-        vec4 texture_color = texture(map_Kd, vertex_texture); 
+        vec4 texture_color = texture(map_Kd, vertex_texture);
+        vFragColor = Kd * texture_color;
     }
     else{
         vFragColor = Kd;

@@ -8,13 +8,16 @@ namespace xe {
 
             static GLint map_Kd_location;
 
-            KdMaterial(const glm::vec4 &Kd) : Kd_(Kd), use_vertex_colors_(false) {}
+            KdMaterial(const glm::vec4 &Kd) : Kd_(Kd), use_vertex_colors_(false), texture_(0) {}
+
+            KdMaterial(const glm::vec4 &Kd, int uvc, GLuint &texture) : Kd_(Kd), use_vertex_colors_(uvc), texture_(texture) {}
 
             static void init() {
                 KdMaterial::create_material_uniform_buffer(sizeof(glm::vec4) + 2 * sizeof(int));
                 create_program_in_project({{GL_VERTEX_SHADER, "Kd_vs.glsl"},
                                            {GL_FRAGMENT_SHADER, "Kd_fs.glsl"}});
-                map_Kd_location = glGetUniformLocation(program(),"map_Kd");
+
+                map_Kd_location = glGetUniformLocation(program(), "map_Kd");
                 if (map_Kd_location == -1) {
                         SPDLOG_WARN("Cannot find map_Kd uniform");
                 }
@@ -28,7 +31,9 @@ namespace xe {
         private:
             const glm::vec4 Kd_;
 
-            bool use_vertex_colors_;
+            int use_vertex_colors_;
+
+            GLuint texture_;
 
 
     };
