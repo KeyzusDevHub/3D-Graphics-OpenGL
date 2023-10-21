@@ -20,13 +20,7 @@
 #include "Application/utils.h"
 
 void SimpleShapeApplication::init() {
-    /*
-     * A utility function that reads the shaders' source files, compiles them and creates the program object,
-     * as everything in OpenGL we reference the program by an integer "handle".
-     * The input to this function is a map that associates a shader type (GL_VERTEX_SHADER and GL_FRAGMENT_SHADER) with
-     * its source file. The source files are located in the PROJECT_DIR/shaders directory, where  PROJECT_DIR is the
-     * current assignment directory (e.g., src/Assignments/Triangle).
-     */
+
     auto program = xe::utils::create_program(
             {
                     {GL_VERTEX_SHADER,   std::string(PROJECT_DIR) + "/shaders/base_vs.glsl"},
@@ -56,13 +50,6 @@ void SimpleShapeApplication::init() {
         5, 4, 6
     };
 
-    /*
-     * All the calls to the OpenGL API are "encapsulated" in the OGL_CALL macro for debugging purposes as explained in
-     * Assignments/DEBUGGING.md. The macro is defined in src/Application/utils.h. If the call to the OpenGL API returns an
-     * error code, the macro will print the name of the function that failed, the file and line number where the error
-     * occurred.
-     */
-
     // Generating the buffer and loading the vertex data into it.
     GLuint v_buffer_handle;
     OGL_CALL(glGenBuffers(1, &v_buffer_handle));
@@ -77,7 +64,7 @@ void SimpleShapeApplication::init() {
     OGL_CALL(glBindVertexArray(vao_));
     OGL_CALL(glBindBuffer(GL_ARRAY_BUFFER, v_buffer_handle));
 
-    //own code
+    // Generating the buffer and loading the indices data into it.
 
     GLuint i_buffer_handle;
     OGL_CALL(glGenBuffers(1, &i_buffer_handle));
@@ -89,7 +76,7 @@ void SimpleShapeApplication::init() {
     OGL_CALL(glBindVertexArray(vao_));
     OGL_CALL(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, i_buffer_handle));
 
-
+    // Generating uniform buffer
 
     GLuint u_buffer_handle;
     OGL_CALL(glGenBuffers(1, &u_buffer_handle));
@@ -100,9 +87,13 @@ void SimpleShapeApplication::init() {
     float strength = 0.5;
     float mix_color[3] = {0.0, 0.0, 1.0};
 
+    // Loading strength and mix_color data into uniform buffer
+
     OGL_CALL(glBindBufferBase(GL_UNIFORM_BUFFER, 0, u_buffer_handle));
     OGL_CALL(glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(float), &strength));
     OGL_CALL(glBufferSubData(GL_UNIFORM_BUFFER, 4 * sizeof(float), 3 * sizeof(float), mix_color));
+
+    // Generating second uniform buffer
 
     GLuint u2_buffer_handle;
     OGL_CALL(glGenBuffers(1, &u2_buffer_handle));
@@ -110,12 +101,14 @@ void SimpleShapeApplication::init() {
     OGL_CALL(glBufferData(GL_UNIFORM_BUFFER, 12 * sizeof(float), NULL, GL_STATIC_DRAW));
     OGL_CALL(glBindBuffer(GL_UNIFORM_BUFFER, 0));
 
-    float theta = glm::pi<float>() / 6.0f;//30 degrees
+    float theta = glm::pi<float>() / 6.0f; //30 degrees
     float cs = std::cos(theta);
     float ss = std::sin(theta);
     glm::mat2 rot{cs,ss,-ss,cs};
     glm::vec2 trans{0.0, -0.25};
     glm::vec2 scale{0.5, 0.5};
+
+    // Loading scale, translation and rotation data into uniform buffer
 
     OGL_CALL(glBindBufferBase(GL_UNIFORM_BUFFER, 1, u2_buffer_handle));
     OGL_CALL(glBufferSubData(GL_UNIFORM_BUFFER, 0, 2 * sizeof(float), &scale));
@@ -124,21 +117,16 @@ void SimpleShapeApplication::init() {
     OGL_CALL(glBufferSubData(GL_UNIFORM_BUFFER, 8 * sizeof(float), 2 * sizeof(float), &rot[1]));
 
 
-    /*
-     * The following lines bound the vertex attribute 0 to the currently bound vertex buffer (the one we just created).
-     * Attribute 0 is specified in the vertex shader with the
-     * layout (location = 0) in vec4 a_vertex_position;
-     * directive.
-     */
     // This specifies that the data for attribute 0 should be read from a vertex buffer
     OGL_CALL(glEnableVertexAttribArray(0));
-    // and this specifies the data layout in the buffer.
+    // and this specifies the vertices data layout in the buffer.
     OGL_CALL(glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), 
                                    reinterpret_cast<GLvoid *>(0)));
 
+    // This specifies that the data for attribute 1 should be read from a vertex buffer
     OGL_CALL(glEnableVertexAttribArray(1));
-    // and this specifies the data layout in the buffer.
-
+    
+    // and this specifies the color data layout in the buffer.
     OGL_CALL(glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), 
                                    reinterpret_cast<GLvoid *>(3 * sizeof(GLfloat)) ));                               
 
@@ -147,7 +135,6 @@ void SimpleShapeApplication::init() {
     //end of vao "recording"
 
     // Setting the background color of the rendering window,
-    // I suggest not using white or black for better debugging.
     OGL_CALL(glClearColor(0.81f, 0.81f, 0.8f, 1.0f));
 
     // This set up an OpenGL viewport of the size of the whole rendering window.
