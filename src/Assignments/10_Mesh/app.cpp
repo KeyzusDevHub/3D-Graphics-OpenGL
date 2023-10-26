@@ -82,7 +82,7 @@ void SimpleShapeApplication::init() {
     // Adding color attribute to mesh
     pyramid->add_attribute(xe::COLOR_0, 3, GL_FLOAT, 3 * sizeof(GLfloat));
 
-    // Load vertices to mesh object
+    // Load indices to mesh object
     pyramid->load_indices(0, indices.size() * sizeof(GLubyte), indices.data());
 
     // Add primitive for all triangles in mesh
