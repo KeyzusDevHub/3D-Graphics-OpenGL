@@ -106,11 +106,10 @@ void SimpleShapeApplication::init() {
     // Preparing PVM matrix  
 
     auto [w, h] = frame_buffer_size();
-    glm::mat4 M(1.0f);
+    glm::mat4 M = glm::translate(glm::mat4(1.0f), glm::vec3(-1, 1, 0));
     glm::mat4 V = glm::lookAt(glm::vec3(0, -2, 2), glm::vec3(0, 0, 0), glm::vec3(0, 0, 1));
     glm::mat4 P = glm::perspective(glm::radians(45.0f), (GLfloat)w/(GLfloat)h, 0.1f, 20.0f);
     glm::mat4 PVM = P * V * M;
-    PVM = glm::translate(PVM, glm::vec3(-1, 1, 0));
 
     // Loading PVM matrix into uniform buffer
 
