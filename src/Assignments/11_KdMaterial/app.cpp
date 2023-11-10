@@ -26,15 +26,8 @@
 void SimpleShapeApplication::init() {
 
     xe::KdMaterial::init();
-    /*
-     * A utility function that reads the shaders' source files, compiles them and creates the program object,
-     * as everything in OpenGL we reference the program by an integer "handle".
-     * The input to this function is a map that associates a shader type (GL_VERTEX_SHADER and GL_FRAGMENT_SHADER) with
-     * its source file. The source files are located in the PROJECT_DIR/shaders directory, where  PROJECT_DIR is the
-     * current assignment directory (e.g., src/Assignments/Triangle).
-     */
 
-    // A vector containing the x,y,z vertex coordinates for the triangle.
+    // A vector containing the x,y,z,r,g,b vertex coordinates for the triangle.
     std::vector<GLfloat> vertices = {
             -0.5f, 0.5f, 0.0f, 0.5f, 0.5f, 0.5f,
             0.5f, 0.5f, 0.0f, 0.5f, 0.5f, 0.5f,
