@@ -1,5 +1,7 @@
 #version 420
 
+#define INV_PI 1.0 / 3.14159265
+
 struct PointLight {
     vec3 position;
     float radius;
@@ -41,6 +43,28 @@ in vec3 vertex_position_vs;
 
 uniform sampler2D map_Kd;
 
+vec3 blinnphong(PointLight p, vec3 fcolor) {
+
+  vec3 normal = normalize(vertex_normal_vs);
+  vec3 lightDir = p.position - vertex_position_vs;
+  float distance = length(lightDir);
+  distance = distance * distance;
+  lightDir = normalize(lightDir);
+
+  float lambertian = max(dot(lightDir, normal), 0.0);
+  float specular = 0.0;
+
+  if (lambertian > 0.0) {
+
+    vec3 viewDir = normalize(-vertex_position_vs);
+
+    vec3 halfDir = normalize(lightDir + viewDir);
+    float specAngle = max(dot(halfDir, normal), 0.0);
+    specular = pow(specAngle, p.radius);
+  }
+  return (ambient + INV_PI * fcolor * lambertian * p.color * p.intensity / distance + vec3(1.0, 1.0, 1.0) * specular * p.color * p.intensity / distance);
+}
+
 
 void main() {
     if (use_vertex_color){
@@ -54,5 +78,8 @@ void main() {
     else{
         vFragColor = Kd;
     }
-    vFragColor.rgb = Ka.rgb * ambient;
+    for (int i = 0; i < n_lights; i++){
+        vFragColor.rgb = blinnphong(lights[i], vFragColor.rgb);
+    }
 }
+
