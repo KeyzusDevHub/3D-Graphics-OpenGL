@@ -24,6 +24,12 @@ Ale skoro już Państwo tworzą macierz M to przesunięcie powinno być w niej z
 23.10.2023 12:40:43 OK
 
 
+# Resize
+
+30.10.2023 12:31:03 
+Przesyłanie macierzy PVM, powinno mieć miejsce przed wywołaniem polecenia drawElements. W tej sytuacji w pierwszek klatce macierz perspective jest zła.
+Poza tym OK
+
 # Reszta
 
 Resztę sprawdzę później :) 
