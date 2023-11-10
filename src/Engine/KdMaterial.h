@@ -2,6 +2,14 @@
 
 #include "AbstractMaterial.h"
 
+#include "Engine/utils.h"
+
+#include "Engine/mesh_loader.h"
+
+#include "ObjectReader/sMesh.h"
+
+#include "texture.h"
+
 namespace xe {
     class KdMaterial : public AbstractMaterial<KdMaterial> {
         public:
@@ -12,16 +20,11 @@ namespace xe {
 
             KdMaterial(const glm::vec4 &Kd, int uvc, GLuint &texture) : Kd_(Kd), use_vertex_colors_(uvc), texture_(texture) {}
 
-            static void init() {
-                KdMaterial::create_material_uniform_buffer(sizeof(glm::vec4) + 2 * sizeof(int));
-                create_program_in_project({{GL_VERTEX_SHADER, "Kd_vs.glsl"},
-                                           {GL_FRAGMENT_SHADER, "Kd_fs.glsl"}});
+            static void init();
 
-                map_Kd_location = glGetUniformLocation(program(), "map_Kd");
-                if (map_Kd_location == -1) {
-                        SPDLOG_WARN("Cannot find map_Kd uniform");
-                }
-            };
+            static Material* create_from_mtl(const mtl_material_t &mat, std::string mtl_dir);
+
+            void set_texture(GLuint texture) {texture_ = texture;};
 
             void bind() const override;
 
