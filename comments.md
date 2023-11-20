@@ -30,6 +30,18 @@ Ale skoro już Państwo tworzą macierz M to przesunięcie powinno być w niej z
 Przesyłanie macierzy PVM, powinno mieć miejsce przed wywołaniem polecenia drawElements. W tej sytuacji w pierwszek klatce macierz perspective jest zła.
 Poza tym OK
 
+13.11.2023 13:45:06 OK
+
+# Zoom
+
+13.11.2023 13:46:16
+Znów zła kolejność we `frame`. 
+
+# Camera movement
+
+13.11.2023 13:47:28
+Znów zła kolejnoś we `frame`. 
+
 # Reszta
 
 Resztę sprawdzę później :) 
