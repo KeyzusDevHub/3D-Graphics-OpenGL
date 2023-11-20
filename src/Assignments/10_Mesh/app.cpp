@@ -122,11 +122,11 @@ void SimpleShapeApplication::frame() {
     glm::mat4 PVM = camera()->projection() * camera()->view() * M_;
 
     OGL_CALL(glBindBufferBase(GL_UNIFORM_BUFFER, 1, u_trans_buffer_handle_));
+    // Sending PVM matrix to uniform buffer
+    OGL_CALL(glBufferSubData(GL_UNIFORM_BUFFER, 0, 16 * sizeof(float), &PVM[0]));
     // Draw all meshes in mesh list
     for (auto m: meshes_)
         m->draw();
-    // Sending PVM matrix to uniform buffer
-    OGL_CALL(glBufferSubData(GL_UNIFORM_BUFFER, 0, 16 * sizeof(float), &PVM[0]));
     OGL_CALL(glBindBufferBase(GL_UNIFORM_BUFFER, 1, 0));
 }
 
