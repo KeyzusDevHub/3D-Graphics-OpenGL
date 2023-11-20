@@ -37,10 +37,14 @@ Poza tym OK
 13.11.2023 13:46:16
 Znów zła kolejność we `frame`. 
 
+20.11.2023 18:43:32 OK
+
 # Camera movement
 
 13.11.2023 13:47:28
 Znów zła kolejnoś we `frame`. 
+
+20.11.2023 18:44:01 OK
 
 # Reszta
 
