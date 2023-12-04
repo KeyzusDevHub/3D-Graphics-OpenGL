@@ -50,8 +50,10 @@ Znów zła kolejnoś we `frame`.
 
 29.11.2023 10:25:41 OK
 
-# Reszta
+# Kd material
 
-Resztę sprawdzę później :) 
+4.12.2023 14:53:25
+Brakuje konstruktora/metody który umożliwyłby ustawienie wartości pola `use_vertex_colors_`. 
+
 
 
