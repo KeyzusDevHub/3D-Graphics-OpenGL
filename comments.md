@@ -55,5 +55,10 @@ Znów zła kolejnoś we `frame`.
 4.12.2023 14:53:25
 Brakuje konstruktora/metody który umożliwyłby ustawienie wartości pola `use_vertex_colors_`. 
 
+18.12.2023 11:39:17
+Jeśli `use_vertex_colors` ma wartość `true` kolor pixela powinien być iloczynem `vertex_color` i `Kd`.
 
+# Textures
 
+18.12.2023 11:40:48
+Podobnie jak w poprtzednim ćwiczeniu, ale jeszcze dodatkowo jeśli tekstura jest obecna to jej kolor mnoży `vertex_color` i Kd. 
