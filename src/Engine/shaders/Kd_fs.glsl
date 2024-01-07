@@ -22,15 +22,15 @@ uniform sampler2D map_Kd;
 
 
 void main() {
+    vec4 color = vec4(1,1,1,1);
     if (use_vertex_color){
-        vFragColor = vertex_color;
+       color *= vertex_color;
     }
-    else if (use_map_Kd){
+    color *= Kd;
+    if (use_map_Kd){
         vec4 texture_color = texture(map_Kd, vertex_texture);
-        vFragColor = Kd * texture_color;
-        vFragColor.rgb = srgb_gamma_correction(vFragColor.rgb);
+        color *= texture_color;
+        color.rgb = srgb_gamma_correction(color.rgb);
     }
-    else{
-        vFragColor = Kd;
-    }
+    vFragColor = color;
 }
