@@ -16,7 +16,7 @@ namespace xe {
 
             static GLint map_Kd_location;
 
-            KdMaterial(const glm::vec4 &Kd) : Kd_(Kd), use_vertex_colors_(false), texture_(0) {}
+            KdMaterial(const glm::vec4 &Kd, int uvc = false) : Kd_(Kd), use_vertex_colors_(uvc), texture_(0) {}
 
             KdMaterial(const glm::vec4 &Kd, int uvc, GLuint &texture) : Kd_(Kd), use_vertex_colors_(uvc), texture_(texture) {}
 

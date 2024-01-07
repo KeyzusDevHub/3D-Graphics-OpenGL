@@ -37,13 +37,28 @@ Poza tym OK
 13.11.2023 13:46:16
 Znów zła kolejność we `frame`. 
 
+20.11.2023 18:43:32 OK
+
 # Camera movement
 
 13.11.2023 13:47:28
 Znów zła kolejnoś we `frame`. 
 
-# Reszta
+20.11.2023 18:44:01 OK
 
-Resztę sprawdzę później :) 
+# Mesh
 
+29.11.2023 10:25:41 OK
 
+# Kd material
+
+4.12.2023 14:53:25
+Brakuje konstruktora/metody który umożliwyłby ustawienie wartości pola `use_vertex_colors_`. 
+
+18.12.2023 11:39:17
+Jeśli `use_vertex_colors` ma wartość `true` kolor pixela powinien być iloczynem `vertex_color` i `Kd`.
+
+# Textures
+
+18.12.2023 11:40:48
+Podobnie jak w poprtzednim ćwiczeniu, ale jeszcze dodatkowo jeśli tekstura jest obecna to jej kolor mnoży `vertex_color` i Kd. 
