@@ -58,7 +58,15 @@ Brakuje konstruktora/metody który umożliwyłby ustawienie wartości pola `use_
 18.12.2023 11:39:17
 Jeśli `use_vertex_colors` ma wartość `true` kolor pixela powinien być iloczynem `vertex_color` i `Kd`.
 
+8.01.2024 17:10:42 OK
+
 # Textures
 
 18.12.2023 11:40:48
-Podobnie jak w poprtzednim ćwiczeniu, ale jeszcze dodatkowo jeśli tekstura jest obecna to jej kolor mnoży `vertex_color` i Kd. 
+Podobnie jak w poprzednim ćwiczeniu, ale jeszcze dodatkowo jeśli tekstura jest obecna to jej kolor mnoży `vertex_color` i Kd. 
+
+8.01.2024 17:12:09 OK
+
+# OBJ reader
+
+8.01.2024 17:13:04 OK
