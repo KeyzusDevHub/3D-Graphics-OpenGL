@@ -1,30 +1,32 @@
-# House
+# Total 112/147
+
+# House 2/2
 
 16.10.2023 OK
 
-# Colors
+# Colors 5/5
 
 16.10.2023 OK
 
-# Indices
+# Indices 5/5
 
 16.10.2023 OK
 
-# Uniforms
+# Uniforms 8/8
 
 23.10.2023 12:37:44 OK
 
-# PVM
+# PVM 5/5
 
 23.10.2023 12:38:49 OK
 Ale skoro już Państwo tworzą macierz M to przesunięcie powinno być w niej zawarte. 
 
-# Pyramid
+# Pyramid 4/4
 
 23.10.2023 12:40:43 OK
 
 
-# Resize
+# Resize 8/8
 
 30.10.2023 12:31:03 
 Przesyłanie macierzy PVM, powinno mieć miejsce przed wywołaniem polecenia drawElements. W tej sytuacji w pierwszek klatce macierz perspective jest zła.
@@ -32,25 +34,25 @@ Poza tym OK
 
 13.11.2023 13:45:06 OK
 
-# Zoom
+# Zoom 10/10
 
 13.11.2023 13:46:16
 Znów zła kolejność we `frame`. 
 
 20.11.2023 18:43:32 OK
 
-# Camera movement
+# Camera movement 15/15
 
 13.11.2023 13:47:28
 Znów zła kolejnoś we `frame`. 
 
 20.11.2023 18:44:01 OK
 
-# Mesh
+# Mesh 10/10
 
 29.11.2023 10:25:41 OK
 
-# Kd material
+# Kd material 20/20
 
 4.12.2023 14:53:25
 Brakuje konstruktora/metody który umożliwyłby ustawienie wartości pola `use_vertex_colors_`. 
@@ -60,13 +62,18 @@ Jeśli `use_vertex_colors` ma wartość `true` kolor pixela powinien być iloczy
 
 8.01.2024 17:10:42 OK
 
-# Textures
+# Textures 15/15
 
 18.12.2023 11:40:48
 Podobnie jak w poprzednim ćwiczeniu, ale jeszcze dodatkowo jeśli tekstura jest obecna to jej kolor mnoży `vertex_color` i Kd. 
 
 8.01.2024 17:12:09 OK
 
-# OBJ reader
+# OBJ reader 5/5
 
 8.01.2024 17:13:04 OK
+
+# Diffuse 0/25
+
+16.01.2024 14:46:39
+Co ma oznaczać ten żółty kwadrat?
