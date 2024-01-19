@@ -10,7 +10,6 @@ layout(std140, binding=1) uniform Transformations {
     mat4 PVM;
     mat4 VM;
     mat3 VM_normal;
-    vec3 viewPos;
 };
 
 
