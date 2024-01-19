@@ -17,6 +17,10 @@ namespace xe {
             static GLint map_Kd_location;
             
             static glm::vec4 Ka_;
+            
+            static glm::vec4 Ks_;
+            
+            static float Ns_;
 
             BlinnPhongMaterial(const glm::vec4 &Kd) : Kd_(Kd), use_vertex_colors_(false), texture_(0) {}
 

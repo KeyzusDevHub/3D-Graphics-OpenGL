@@ -1,7 +1,5 @@
 #version 420
 
-#define INV_PI 1.0 / 3.14159265
-
 struct PointLight {
     vec3 position;
     float radius;
@@ -14,6 +12,8 @@ layout(location=0) out vec4 vFragColor;
 layout(std140, binding=0) uniform KdMaterial {
     vec4 Ka;
     vec4 Kd;
+    vec4 Ks;
+    float Ns;
     bool use_vertex_color; 
     bool use_map_Kd;
 };
@@ -43,43 +43,41 @@ in vec3 vertex_position_vs;
 
 uniform sampler2D map_Kd;
 
-vec3 blinnphong(PointLight p, vec3 fcolor) {
-
-  vec3 normal = normalize(vertex_normal_vs);
-  vec3 lightDir = p.position - vertex_position_vs;
-  float distance = length(lightDir);
-  distance = distance * distance;
-  lightDir = normalize(lightDir);
-
-  float lambertian = max(dot(lightDir, normal), 0.0);
-  float specular = 0.0;
-
-  if (lambertian > 0.0) {
-
-    vec3 viewDir = normalize(-vertex_position_vs);
-
-    vec3 halfDir = normalize(lightDir + viewDir);
-    float specAngle = max(dot(halfDir, normal), 0.0);
-    specular = pow(specAngle, p.radius);
-  }
-  return (ambient + INV_PI * fcolor * lambertian * p.color * p.intensity / distance + vec3(1.0, 1.0, 1.0) * specular * p.color * p.intensity / distance);
-}
-
 
 void main() {
+    vec4 color = vec4(1,1,1,1);
     if (use_vertex_color){
-        vFragColor = vertex_color;
+        color *= vertex_color;
     }
-    else if (use_map_Kd){
+    color.rgb = Kd.rgb * ambient;
+
+    if (use_map_Kd){
         vec4 texture_color = texture(map_Kd, vertex_texture);
-        vFragColor = Kd * texture_color;
-        vFragColor.rgb = srgb_gamma_correction(vFragColor.rgb);
+        color *= texture_color;
+        color.rgb = srgb_gamma_correction(color.rgb);
     }
-    else{
-        vFragColor = Kd;
+
+    vec3 normal = normalize(vertex_normal_vs);
+
+    if (!gl_FrontFacing) {
+        normal = -normal;
     }
+
+
     for (int i = 0; i < n_lights; i++){
-        vFragColor.rgb = blinnphong(lights[i], vFragColor.rgb);
+        vec3 light_vector = normalize(lights[i].position - vertex_position_vs);
+        float light_distance = length(lights[i].position - vertex_position_vs);
+        float diffuse = max(0.0, dot(normal, light_vector));
+        float r = max(lights[i].radius, light_distance);
+        float attenuation = 1.0 / (r * r);
+
+        vec3 view_vector = normalize(-vertex_position_vs);
+        vec3 half_vector = normalize(light_vector + view_vector);
+        vec3 specular = ((Ns + 8) / (8 * radians(180))) * pow(max(dot(view_vector, half_vector), 0.0), Ns) * Ks.rgb;
+        
+        color.rgb += specular;
+        color.rgb += 1.0 / radians(180) * color.rgb * lights[i].color * lights[i].intensity * diffuse * attenuation;
     }
+    vFragColor = color;
 }
 

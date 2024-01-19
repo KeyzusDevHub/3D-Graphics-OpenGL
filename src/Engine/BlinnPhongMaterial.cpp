@@ -3,10 +3,14 @@
 GLint xe::BlinnPhongMaterial::map_Kd_location;
 
 glm::vec4 xe::BlinnPhongMaterial::Ka_;
+glm::vec4 xe::BlinnPhongMaterial::Ks_;
+float xe::BlinnPhongMaterial::Ns_;
 
 xe::Material *xe::BlinnPhongMaterial::create_from_mtl(const mtl_material_t &mat, std::string mtl_dir) {
      glm::vec4 color = get_color(mat.diffuse);
      xe::BlinnPhongMaterial::Ka_ = get_color(mat.ambient);
+     xe::BlinnPhongMaterial::Ks_ = get_color(mat.specular);
+     xe::BlinnPhongMaterial::Ns_ = mat.shininess;
      SPDLOG_DEBUG("Adding ColorMaterial {}", glm::to_string(color));
      auto material = new xe::BlinnPhongMaterial(color);
      if (!mat.diffuse_texname.empty()) {
@@ -21,7 +25,7 @@ xe::Material *xe::BlinnPhongMaterial::create_from_mtl(const mtl_material_t &mat,
 }
 
 void xe::BlinnPhongMaterial::init() {
-    BlinnPhongMaterial::create_material_uniform_buffer(2 * sizeof(glm::vec4) + 2 * sizeof(int));
+    BlinnPhongMaterial::create_material_uniform_buffer(5 * sizeof(glm::vec4));
     create_program_in_project({{GL_VERTEX_SHADER, "BlinnPhong_vs.glsl"},
                                 {GL_FRAGMENT_SHADER, "BlinnPhong_fs.glsl"}});
 
@@ -38,12 +42,14 @@ void xe::BlinnPhongMaterial::bind() const{
     if (texture_ > 0){
         use_map_kd = 1;
     }
-
+    
     OGL_CALL(glBindBufferBase(GL_UNIFORM_BUFFER, 0, material_uniform_buffer()));
     OGL_CALL(glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(glm::vec4), &xe::BlinnPhongMaterial::Ka_));
     OGL_CALL(glBufferSubData(GL_UNIFORM_BUFFER, sizeof(glm::vec4), sizeof(glm::vec4), &Kd_));
-    OGL_CALL(glBufferSubData(GL_UNIFORM_BUFFER, 2 * sizeof(glm::vec4), sizeof(int), &use_vertex_colors_));
-    OGL_CALL(glBufferSubData(GL_UNIFORM_BUFFER, 2 * sizeof(glm::vec4) + sizeof(int), sizeof(int), &use_map_kd));
+    OGL_CALL(glBufferSubData(GL_UNIFORM_BUFFER, 2 * sizeof(glm::vec4), sizeof(glm::vec4), &xe::BlinnPhongMaterial::Ks_));
+    OGL_CALL(glBufferSubData(GL_UNIFORM_BUFFER, 3 * sizeof(glm::vec4), sizeof(GLfloat), &xe::BlinnPhongMaterial::Ns_));
+    OGL_CALL(glBufferSubData(GL_UNIFORM_BUFFER, 3 * sizeof(glm::vec4) + sizeof(GLfloat), sizeof(int), &use_vertex_colors_));
+    OGL_CALL(glBufferSubData(GL_UNIFORM_BUFFER, 3 * sizeof(glm::vec4) + sizeof(GLfloat) + sizeof(int), sizeof(int), &use_map_kd));
     
     if (texture_ > 0){
         OGL_CALL(glActiveTexture(GL_TEXTURE0));
@@ -56,4 +62,5 @@ void xe::BlinnPhongMaterial::unbind() const{
         OGL_CALL(glBindTexture(GL_TEXTURE_2D, 0));
     }
     OGL_CALL(glBindBufferBase(GL_UNIFORM_BUFFER, 0, 0));
+    
 }
