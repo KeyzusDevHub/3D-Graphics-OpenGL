@@ -16,11 +16,11 @@
 
 #include "Engine/KdMaterial.h"
 
-#include "Engine/light.h"
-
 #include "glm/glm.hpp"
 
 #include "Application/application.h"
+
+#include "Engine/light.h"
 
 
 class SimpleShapeApplication : public xe::Application {
@@ -44,25 +44,27 @@ public:
 
     void set_controler(xe::CameraController *controller) { controller_ = controller; }
 
+    void add_light(xe::PointLight light) { lights_.push_back(light); }
+
     xe::Camera* camera() const {
         assert(camera_);
         return camera_;
     }
 
-    void add_mesh(xe::Mesh *mesh) { meshes_.push_back(mesh); }
-
-    void add_light(xe::PointLight light) { lights_.push_back(light); }
+    void add_mesh(xe::Mesh *mesh) {
+        meshes_.push_back(mesh);
+    }
 
 private:
     GLuint vao_;
     GLuint u_trans_buffer_handle_;
     GLuint u_light_buffer_handle_;
+    std::vector<xe::PointLight> lights_;
     
     xe::Camera *camera_;
     xe::CameraController *controller_;
 
     glm::mat4 M_;
 
-    std::vector<xe::Mesh*> meshes_;
-    std::vector<xe::PointLight> lights_;
+    std::vector<xe::Mesh*> meshes_; 
 };
