@@ -1,4 +1,4 @@
-# Total 112/147
+# Total 132/147
 
 # House 2/2
 
@@ -73,7 +73,15 @@ Podobnie jak w poprzednim ćwiczeniu, ale jeszcze dodatkowo jeśli tekstura jest
 
 8.01.2024 17:13:04 OK
 
-# Diffuse 0/25
+# Diffuse 20/25
 
 16.01.2024 14:46:39
 Co ma oznaczać ten żółty kwadrat?
+
+22.01.2024 16:06:19 OK
+Ka jest nieużywane w szaderze. 
+
+# Specular
+
+22.01.2024 16:08:28
+Jak ustalana jest wartość `Ns`?
