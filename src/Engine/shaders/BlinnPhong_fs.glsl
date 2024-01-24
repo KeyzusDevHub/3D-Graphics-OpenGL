@@ -49,7 +49,7 @@ void main() {
     if (use_vertex_color){
         color *= vertex_color;
     }
-    color.rgb = Kd.rgb * ambient;
+    color.rgb = Kd.rgb * Ka.rgb * ambient;
 
     if (use_map_Kd){
         vec4 texture_color = texture(map_Kd, vertex_texture);
