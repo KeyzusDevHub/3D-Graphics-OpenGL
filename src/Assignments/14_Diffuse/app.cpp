@@ -40,7 +40,7 @@ void SimpleShapeApplication::init() {
     // Create new mesh object
     auto pyramid = xe::load_mesh_from_obj(std::string(ROOT_DIR) + "/Models/square.obj", std::string(ROOT_DIR) + "/Models");
 
-    auto white_light = xe::PointLight(glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(1.0f, 1.0f, 1.0f), 10.0, 0.1);
+    auto white_light = xe::PointLight(glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(1.0f, 1.0f, 1.0f), 3.0, 0.1);
     add_light(white_light);
     // Add mesh to list
     add_mesh(pyramid);

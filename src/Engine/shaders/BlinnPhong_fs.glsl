@@ -46,15 +46,19 @@ uniform sampler2D map_Kd;
 
 void main() {
     vec4 color = vec4(1,1,1,1);
+    // Ambient color
+    color.rgb = Ka.rgb * ambient;
+    
+    vec4 color_Kd = Kd;
+    
     if (use_vertex_color){
-        color *= vertex_color;
+        color_Kd *= vertex_color;
     }
-    color.rgb = Kd.rgb * Ka.rgb * ambient;
 
     if (use_map_Kd){
         vec4 texture_color = texture(map_Kd, vertex_texture);
-        color *= texture_color;
-        color.rgb = srgb_gamma_correction(color.rgb);
+        color_Kd *= texture_color;
+        color_Kd.rgb = srgb_gamma_correction(color.rgb);
     }
 
     vec3 normal = normalize(vertex_normal_vs);
@@ -76,7 +80,7 @@ void main() {
         vec3 specular = ((Ns + 8) / (8 * radians(180))) * pow(max(dot(view_vector, half_vector), 0.0), Ns) * Ks.rgb;
         
         color.rgb += specular;
-        color.rgb += 1.0 / radians(180) * color.rgb * lights[i].color * lights[i].intensity * diffuse * attenuation;
+        color.rgb += 1.0 / radians(180) * color_Kd.rgb * lights[i].color * lights[i].intensity * diffuse * attenuation;
     }
     vFragColor = color;
 }
