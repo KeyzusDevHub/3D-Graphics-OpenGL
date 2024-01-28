@@ -81,6 +81,12 @@ Co ma oznaczać ten żółty kwadrat?
 22.01.2024 16:06:19 OK
 Ka jest nieużywane w szaderze. 
 
+8.01.2024 13:18:01
+Żle Panowie liczą kolory w szaderze.
+color = Ka*ambient+color_Kd*diffuse + Ks*specular.
+gdzie ambiet, specular i diffuse to czlonyw zwizane wyłącznie z oświetleniem. Te czlony maja Panowie poprawnie, ale calość nie jest dobrze poskladana. 
+color_Kd = vertex_color * Kd * texture_color; 
+
 # Specular
 
 22.01.2024 16:08:28
