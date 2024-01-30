@@ -77,7 +77,7 @@ void main() {
 
         vec3 view_vector = normalize(-vertex_position_vs);
         vec3 half_vector = normalize(light_vector + view_vector);
-        vec3 specular = ((Ns + 8) / (8 * radians(180))) * pow(max(dot(view_vector, half_vector), 0.0), Ns) * Ks.rgb;
+        vec3 specular = ((Ns + 8) / (8 * radians(180))) * pow(max(dot(normal, half_vector), 0.0), Ns) * Ks.rgb * attenuation * lights[i].color * lights[i].intensity;
         
         color.rgb += specular;
         color.rgb += 1.0 / radians(180) * color_Kd.rgb * lights[i].color * lights[i].intensity * diffuse * attenuation;
