@@ -87,7 +87,12 @@ color = Ka*ambient+color_Kd*diffuse + Ks*specular.
 gdzie ambiet, specular i diffuse to czlonyw zwizane wyłącznie z oświetleniem. Te czlony maja Panowie poprawnie, ale calość nie jest dobrze poskladana. 
 color_Kd = vertex_color * Kd * texture_color; 
 
+30.01.2024 10:38:51 OK
+
 # Specular
 
 22.01.2024 16:08:28
 Jak ustalana jest wartość `Ns`?
+
+30.01.2024 10:39:19
+Do liczenia specular uzywają Panowie dot(V,H) anie dot(N,H). Ponadto w czesci specular brakuje attenutaion, koloru i natężenia światła. 
